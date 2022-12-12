@@ -6,28 +6,34 @@ namespace Directory.Data.Repositories;
 
 public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity, new()
 {
-    public Task Add(T Entity)
+    protected DirectoryContext _directoryContext;
+
+    public BaseRepository(DirectoryContext directoryContext)
     {
-        throw new NotImplementedException();
+        _directoryContext ??= directoryContext;
+    }
+    public void Add(T entity)
+    {
+        _directoryContext.Set<T>().Add(entity);
     }
 
-    public Task<T> Get(Expression<Func<T, bool>> filter)
+    public T Get(Expression<Func<T, bool>> filter)
     {
-        throw new NotImplementedException();
+        return _directoryContext.Set<T>().FirstOrDefault(filter);
     }
 
-    public Task<IEnumerable<T>> GetAll(Expression<Func<T, bool>> filter)
+    public IEnumerable<T> GetAll(Expression<Func<T, bool>> filter)
     {
-        throw new NotImplementedException();
+        return _directoryContext.Set<T>().Where(filter);
     }
 
-    public Task Remove(T Entity)
+    public void Remove(T entity)
     {
-        throw new NotImplementedException();
+        _directoryContext.Set<T>().Remove(entity);
     }
 
-    public Task Update(T Entity)
+    public void Update(T entity)
     {
-        throw new NotImplementedException();
+        _directoryContext.Set<T>().Update(entity);
     }
 }
